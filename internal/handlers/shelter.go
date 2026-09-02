@@ -3,11 +3,13 @@ package handlers
 import "cp_lab1/internal/repositories"
 
 type ShelterHandler struct {
-	repo repositories.ShelterRepo
+	shelterRepo repositories.ShelterRepo
+	catRepo     repositories.CatRepo
 }
 
-func NewShelterHandler(repo repositories.ShelterRepo) *ShelterHandler {
+func NewShelterHandler(sr repositories.ShelterRepo, cr repositories.CatRepo) *ShelterHandler {
 	return &ShelterHandler{
-		repo: repo,
+		shelterRepo: sr,
+		catRepo:     cr,
 	}
 }
