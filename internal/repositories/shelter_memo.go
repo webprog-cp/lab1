@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"cp_lab1/internal/errors"
+	"cp_lab1/internal/const_errors"
 	"cp_lab1/internal/models"
 	"sync"
 )
@@ -38,7 +38,7 @@ func (sr *ShelterRepoMemo) GetByID(id uint64) (models.Shelter, error) {
 
 	shelter, exists := sr.shelters[id]
 	if !exists {
-		return models.Shelter{}, errors.NoEntityByID
+		return models.Shelter{}, const_errors.NoEntityByID
 	}
 
 	return shelter, nil
@@ -61,7 +61,7 @@ func (sr *ShelterRepoMemo) Update(id uint64, shelter models.Shelter) error {
 	defer sr.mu.Unlock()
 
 	if _, exists := sr.shelters[id]; !exists {
-		return errors.NoEntityByID
+		return const_errors.NoEntityByID
 	}
 
 	shelter.ID = id
@@ -75,7 +75,7 @@ func (sr *ShelterRepoMemo) Delete(id uint64) error {
 	defer sr.mu.Unlock()
 
 	if _, exists := sr.shelters[id]; !exists {
-		return errors.NoEntityByID
+		return const_errors.NoEntityByID
 	}
 
 	delete(sr.shelters, id)
@@ -83,7 +83,7 @@ func (sr *ShelterRepoMemo) Delete(id uint64) error {
 	return nil
 }
 
-func (sr *ShelterRepoMemo) DeleteAll() {
+func (sr *ShelterRepoMemo) DeleteAll() error {
 	sr.mu.Lock()
 	defer sr.mu.Unlock()
 

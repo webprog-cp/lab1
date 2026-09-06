@@ -6,6 +6,11 @@ import (
 	"cp_lab1/internal/router"
 )
 
+// @title Cats shelter management API
+// @version 1.0
+// @description REST API service for cats shelter management.
+// @host localhost:8080
+// @BasePath /api/v1
 func main() {
 	cfg := config.Load()
 	a := app.New()

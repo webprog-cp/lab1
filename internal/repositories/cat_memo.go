@@ -1,7 +1,7 @@
 package repositories
 
 import (
-	"cp_lab1/internal/errors"
+	"cp_lab1/internal/const_errors"
 	"cp_lab1/internal/models"
 	"sync"
 )
@@ -19,7 +19,7 @@ func NewCatRepoMemory() *CatRepoMemo {
 	}
 }
 
-func (cr *CatRepoMemo) GetAll() []models.Cat {
+func (cr *CatRepoMemo) GetAll() ([]models.Cat, error) {
 	cr.mu.RLock()
 	defer cr.mu.RUnlock()
 
@@ -29,7 +29,7 @@ func (cr *CatRepoMemo) GetAll() []models.Cat {
 		cats = append(cats, cat)
 	}
 
-	return cats
+	return cats, nil
 }
 
 func (cr *CatRepoMemo) GetByID(id uint64) (models.Cat, error) {
@@ -38,7 +38,7 @@ func (cr *CatRepoMemo) GetByID(id uint64) (models.Cat, error) {
 
 	cat, exists := cr.cats[id]
 	if !exists {
-		return models.Cat{}, errors.NoEntityByID
+		return models.Cat{}, const_errors.NoEntityByID
 	}
 
 	return cat, nil
@@ -48,7 +48,7 @@ func (cr *CatRepoMemo) GetByShelterID(id uint64) ([]models.Cat, error) {
 	cr.mu.RLock()
 	defer cr.mu.RUnlock()
 
-	cats := []models.Cat{}
+	var cats []models.Cat
 
 	for _, cat := range cr.cats {
 		if cat.ShelterID == id {
@@ -76,7 +76,7 @@ func (cr *CatRepoMemo) Update(id uint64, cat models.Cat) error {
 	defer cr.mu.Unlock()
 
 	if _, exists := cr.cats[id]; !exists {
-		return errors.NoEntityByID
+		return const_errors.NoEntityByID
 	}
 
 	cat.ID = id
@@ -90,7 +90,7 @@ func (cr *CatRepoMemo) Delete(id uint64) error {
 	defer cr.mu.Unlock()
 
 	if _, exists := cr.cats[id]; !exists {
-		return errors.NoEntityByID
+		return const_errors.NoEntityByID
 	}
 
 	delete(cr.cats, id)
@@ -98,10 +98,12 @@ func (cr *CatRepoMemo) Delete(id uint64) error {
 	return nil
 }
 
-func (cr *CatRepoMemo) DeleteAll() {
+func (cr *CatRepoMemo) DeleteAll() error {
 	cr.mu.Lock()
 	defer cr.mu.Unlock()
 
 	cr.cats = make(map[uint64]models.Cat)
 	cr.nextID = 1
+
+	return nil
 }

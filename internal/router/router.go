@@ -13,7 +13,7 @@ func New(cfg *config.Config, app *app.App) *gin.Engine {
 
 	ge := gin.New()
 
-	registerRoutes(ge)
+	registerRoutes(ge, app)
 
 	ge.Use(gin.Logger())
 	ge.Use(gin.Recovery()) // Recovers from any panic and returns 500 if there is one
@@ -27,7 +27,7 @@ func registerCats(ge *gin.Engine, ch *handlers.CatHandler) {
 }
 
 func registerShelters(ge *gin.Engine, sh *handlers.ShelterHandler) {
-	//#TODO: finish app, split logic
+	shelters := ge.Group("/shelters")
 }
 
 func registerRoutes(ge *gin.Engine, app *app.App) {
