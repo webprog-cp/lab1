@@ -44,7 +44,7 @@ func (cr *CatRepoMemo) GetByID(id uint64) (models.Cat, error) {
 	return cat, nil
 }
 
-func (cr *CatRepoMemo) GetByShelterID(id uint64) ([]models.Cat, error) {
+func (cr *CatRepoMemo) GetCatsByShelterID(id uint64) ([]models.Cat, error) {
 	cr.mu.RLock()
 	defer cr.mu.RUnlock()
 
@@ -59,7 +59,7 @@ func (cr *CatRepoMemo) GetByShelterID(id uint64) ([]models.Cat, error) {
 	return cats, nil
 }
 
-func (cr *CatRepoMemo) Create(cat models.Cat) (models.Cat, error) {
+func (cr *CatRepoMemo) Create(cat models.Cat) error {
 	cr.mu.Lock()
 	defer cr.mu.Unlock()
 
@@ -68,7 +68,7 @@ func (cr *CatRepoMemo) Create(cat models.Cat) (models.Cat, error) {
 
 	cr.cats[cat.ID] = cat
 
-	return cat, nil
+	return nil
 }
 
 func (cr *CatRepoMemo) Update(id uint64, cat models.Cat) error {

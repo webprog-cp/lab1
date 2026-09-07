@@ -1,11 +1,13 @@
 package handlers
 
 import (
-	"cp_lab1/internal/repositories"
+	"strconv"
 	"net/http"
 
+	"cp_lab1/internal/repositories"
+	"cp_lab1/internal/models"
+
 	"github.com/gin-gonic/gin"
-	"strconv"
 )
 
 type CatHandler struct {
@@ -43,4 +45,75 @@ func (ch *CatHandler) GetByID(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, cat)
+}
+
+func (ch *CatHandler) GetByShelterID(c *gin.Context) {
+	idStr := c.Param("id")
+
+	id, err := strconv.ParseUint(idStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{})
+	}
+
+	cats, err := ch.repo.GetCatsByShelterID(id)
+	if err != nil {
+		//err
+	}
+
+	c.JSON(http.StatusOK, cats)
+}
+
+func (ch *CatHandler) Create(c *gin.Context) {
+	var cat models.Cat
+
+	if err := c.BindJSON(&cat); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{})
+	}
+
+	if err := ch.repo.Create(cat); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{})
+	}
+
+	c.JSON(http.StatusOK, gin.H{})
+}
+
+func (ch *CatHandler) Update(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.ParseUint(idStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{})
+	}
+
+	var cat models.Cat
+	if err := c.BindJSON(&cat); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{})
+	}
+
+	if err := ch.repo.Update(id, cat); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{})
+	}
+
+	c.JSON(http.StatusOK, cat)
+}
+
+func (ch *CatHandler) Delete(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.ParseUint(idStr, 10, 64)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{})
+	}
+
+	if err := ch.repo.Delete(id); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{})
+	}
+
+	c.JSON(http.StatusOK, gin.H{})
+}
+
+func (ch *CatHandler) DeleteAll(c *gin.Context) {
+	if err := ch.repo.DeleteAll(); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{})
+	}
+
+	c.JSON(http.StatusOK, gin.H{})
 }
