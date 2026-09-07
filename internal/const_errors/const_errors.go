@@ -6,4 +6,4 @@ func (e ConstError) Error() string {
 	return string(e)
 }
 
-const NoEntityByID = ConstError("No such entity with this ID found")
+const NoEntityByID = ConstError("no entity with this ID found")

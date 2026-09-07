@@ -1,9 +1,11 @@
 package repositories
 
 import (
+	"fmt"
+	"sync"
+
 	"cp_lab1/internal/const_errors"
 	"cp_lab1/internal/models"
-	"sync"
 )
 
 type CatRepoMemo struct {
@@ -38,7 +40,7 @@ func (cr *CatRepoMemo) GetByID(id uint64) (models.Cat, error) {
 
 	cat, exists := cr.cats[id]
 	if !exists {
-		return models.Cat{}, const_errors.NoEntityByID
+		return models.Cat{}, fmt.Errorf("cat %d: %w", id, const_errors.NoEntityByID)
 	}
 
 	return cat, nil
@@ -59,7 +61,7 @@ func (cr *CatRepoMemo) GetCatsByShelterID(id uint64) ([]models.Cat, error) {
 	return cats, nil
 }
 
-func (cr *CatRepoMemo) Create(cat models.Cat) error {
+func (cr *CatRepoMemo) Create(cat models.Cat) (models.Cat, error) {
 	cr.mu.Lock()
 	defer cr.mu.Unlock()
 
@@ -68,7 +70,7 @@ func (cr *CatRepoMemo) Create(cat models.Cat) error {
 
 	cr.cats[cat.ID] = cat
 
-	return nil
+	return cat, nil
 }
 
 func (cr *CatRepoMemo) Update(id uint64, cat models.Cat) error {
@@ -76,7 +78,7 @@ func (cr *CatRepoMemo) Update(id uint64, cat models.Cat) error {
 	defer cr.mu.Unlock()
 
 	if _, exists := cr.cats[id]; !exists {
-		return const_errors.NoEntityByID
+		return fmt.Errorf("cat %d: %w", id, const_errors.NoEntityByID)
 	}
 
 	cat.ID = id
@@ -90,7 +92,7 @@ func (cr *CatRepoMemo) Delete(id uint64) error {
 	defer cr.mu.Unlock()
 
 	if _, exists := cr.cats[id]; !exists {
-		return const_errors.NoEntityByID
+		return fmt.Errorf("cat %d: %w", id, const_errors.NoEntityByID)
 	}
 
 	delete(cr.cats, id)

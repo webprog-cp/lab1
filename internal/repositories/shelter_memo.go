@@ -1,9 +1,11 @@
 package repositories
 
 import (
+	"fmt"
+	"sync"
+
 	"cp_lab1/internal/const_errors"
 	"cp_lab1/internal/models"
-	"sync"
 )
 
 type ShelterRepoMemo struct {
@@ -19,7 +21,7 @@ func NewShelterRepoMemory() *ShelterRepoMemo {
 	}
 }
 
-func (sr *ShelterRepoMemo) GetAll() []models.Shelter {
+func (sr *ShelterRepoMemo) GetAll() ([]models.Shelter, error) {
 	sr.mu.RLock()
 	defer sr.mu.RUnlock()
 
@@ -29,7 +31,7 @@ func (sr *ShelterRepoMemo) GetAll() []models.Shelter {
 		shelters = append(shelters, shelter)
 	}
 
-	return shelters
+	return shelters, nil
 }
 
 func (sr *ShelterRepoMemo) GetByID(id uint64) (models.Shelter, error) {
@@ -38,7 +40,7 @@ func (sr *ShelterRepoMemo) GetByID(id uint64) (models.Shelter, error) {
 
 	shelter, exists := sr.shelters[id]
 	if !exists {
-		return models.Shelter{}, const_errors.NoEntityByID
+		return models.Shelter{}, fmt.Errorf("shelter %d: %w", id, const_errors.NoEntityByID)
 	}
 
 	return shelter, nil
@@ -61,7 +63,7 @@ func (sr *ShelterRepoMemo) Update(id uint64, shelter models.Shelter) error {
 	defer sr.mu.Unlock()
 
 	if _, exists := sr.shelters[id]; !exists {
-		return const_errors.NoEntityByID
+		return fmt.Errorf("shelter %d: %w", id, const_errors.NoEntityByID)
 	}
 
 	shelter.ID = id
@@ -75,7 +77,7 @@ func (sr *ShelterRepoMemo) Delete(id uint64) error {
 	defer sr.mu.Unlock()
 
 	if _, exists := sr.shelters[id]; !exists {
-		return const_errors.NoEntityByID
+		return fmt.Errorf("shelter %d: %w", id, const_errors.NoEntityByID)
 	}
 
 	delete(sr.shelters, id)
@@ -89,4 +91,6 @@ func (sr *ShelterRepoMemo) DeleteAll() error {
 
 	sr.shelters = make(map[uint64]models.Shelter)
 	sr.nextID = 1
+
+	return nil
 }
