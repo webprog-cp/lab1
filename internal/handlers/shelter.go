@@ -26,7 +26,7 @@ func NewShelterHandler(sr repositories.ShelterRepo, cr repositories.CatRepo) *Sh
 // @Tags shelters
 // @Produce json
 // @Success 200 {array} models.Shelter
-// @Failure 500 {object} map[string]string
+// @Failure 500 {object} models.ErrorResponse
 // @Router /shelters [get]
 func (sh *ShelterHandler) GetAll(c *gin.Context) {
 	shelters, err := sh.shelterRepo.GetAll()
@@ -44,9 +44,9 @@ func (sh *ShelterHandler) GetAll(c *gin.Context) {
 // @Produce json
 // @Param id path int true "Shelter ID"
 // @Success 200 {object} models.Shelter
-// @Failure 400 {object} map[string]string
-// @Failure 404 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
 // @Router /shelters/{id} [get]
 func (sh *ShelterHandler) GetByID(c *gin.Context) {
 	id, valid := idParam(c)
@@ -71,9 +71,9 @@ func (sh *ShelterHandler) GetByID(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param shelter body models.Shelter true "Shelter"
 // @Success 201 {object} models.Shelter
-// @Failure 400 {object} map[string]string
-// @Failure 401 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 401 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
 // @Router /shelters [post]
 func (sh *ShelterHandler) Create(c *gin.Context) {
 	var shelter models.Shelter
@@ -100,10 +100,10 @@ func (sh *ShelterHandler) Create(c *gin.Context) {
 // @Param id path int true "Shelter ID"
 // @Param shelter body models.Shelter true "Shelter"
 // @Success 200 {object} models.Shelter
-// @Failure 400 {object} map[string]string
-// @Failure 401 {object} map[string]string
-// @Failure 404 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 401 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
 // @Router /shelters/{id} [put]
 func (sh *ShelterHandler) Update(c *gin.Context) {
 	id, valid := idParam(c)
@@ -132,10 +132,10 @@ func (sh *ShelterHandler) Update(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param id path int true "Shelter ID"
 // @Success 204
-// @Failure 400 {object} map[string]string
-// @Failure 401 {object} map[string]string
-// @Failure 404 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 401 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
 // @Router /shelters/{id} [delete]
 func (sh *ShelterHandler) Delete(c *gin.Context) {
 	id, valid := idParam(c)
@@ -156,8 +156,8 @@ func (sh *ShelterHandler) Delete(c *gin.Context) {
 // @Tags shelters
 // @Security ApiKeyAuth
 // @Success 204
-// @Failure 401 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Failure 401 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
 // @Router /shelters [delete]
 func (sh *ShelterHandler) DeleteAll(c *gin.Context) {
 	if err := sh.shelterRepo.DeleteAll(); err != nil {
@@ -174,9 +174,9 @@ func (sh *ShelterHandler) DeleteAll(c *gin.Context) {
 // @Produce json
 // @Param id path int true "Shelter ID"
 // @Success 200 {array} models.Cat
-// @Failure 400 {object} map[string]string
-// @Failure 404 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
 // @Router /shelters/{id}/cats [get]
 func (sh *ShelterHandler) GetCats(c *gin.Context) {
 	id, valid := idParam(c)

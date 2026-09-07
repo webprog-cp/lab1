@@ -43,7 +43,7 @@ func statusByError(err error) int {
 // @Tags cats
 // @Produce json
 // @Success 200 {array} models.Cat
-// @Failure 500 {object} map[string]string
+// @Failure 500 {object} models.ErrorResponse
 // @Router /cats [get]
 func (ch *CatHandler) GetAll(c *gin.Context) {
 	cats, err := ch.repo.GetAll()
@@ -61,9 +61,9 @@ func (ch *CatHandler) GetAll(c *gin.Context) {
 // @Produce json
 // @Param id path int true "Cat ID"
 // @Success 200 {object} models.Cat
-// @Failure 400 {object} map[string]string
-// @Failure 404 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
 // @Router /cats/{id} [get]
 func (ch *CatHandler) GetByID(c *gin.Context) {
 	id, valid := idParam(c)
@@ -88,9 +88,9 @@ func (ch *CatHandler) GetByID(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param cat body models.Cat true "Cat"
 // @Success 201 {object} models.Cat
-// @Failure 400 {object} map[string]string
-// @Failure 401 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 401 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
 // @Router /cats [post]
 func (ch *CatHandler) Create(c *gin.Context) {
 	var cat models.Cat
@@ -117,10 +117,10 @@ func (ch *CatHandler) Create(c *gin.Context) {
 // @Param id path int true "Cat ID"
 // @Param cat body models.Cat true "Cat"
 // @Success 200 {object} models.Cat
-// @Failure 400 {object} map[string]string
-// @Failure 401 {object} map[string]string
-// @Failure 404 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 401 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
 // @Router /cats/{id} [put]
 func (ch *CatHandler) Update(c *gin.Context) {
 	id, valid := idParam(c)
@@ -149,10 +149,10 @@ func (ch *CatHandler) Update(c *gin.Context) {
 // @Security ApiKeyAuth
 // @Param id path int true "Cat ID"
 // @Success 204
-// @Failure 400 {object} map[string]string
-// @Failure 401 {object} map[string]string
-// @Failure 404 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Failure 400 {object} models.ErrorResponse
+// @Failure 401 {object} models.ErrorResponse
+// @Failure 404 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
 // @Router /cats/{id} [delete]
 func (ch *CatHandler) Delete(c *gin.Context) {
 	id, valid := idParam(c)
@@ -173,8 +173,8 @@ func (ch *CatHandler) Delete(c *gin.Context) {
 // @Tags cats
 // @Security ApiKeyAuth
 // @Success 204
-// @Failure 401 {object} map[string]string
-// @Failure 500 {object} map[string]string
+// @Failure 401 {object} models.ErrorResponse
+// @Failure 500 {object} models.ErrorResponse
 // @Router /cats [delete]
 func (ch *CatHandler) DeleteAll(c *gin.Context) {
 	if err := ch.repo.DeleteAll(); err != nil {
