@@ -38,6 +38,13 @@ func statusByError(err error) int {
 	return http.StatusInternalServerError
 }
 
+// GetAll godoc
+// @Summary Get all cats
+// @Tags cats
+// @Produce json
+// @Success 200 {array} models.Cat
+// @Failure 500 {object} map[string]string
+// @Router /cats [get]
 func (ch *CatHandler) GetAll(c *gin.Context) {
 	cats, err := ch.repo.GetAll()
 	if err != nil {
@@ -48,6 +55,16 @@ func (ch *CatHandler) GetAll(c *gin.Context) {
 	c.JSON(http.StatusOK, cats)
 }
 
+// GetByID godoc
+// @Summary Get cat by ID
+// @Tags cats
+// @Produce json
+// @Param id path int true "Cat ID"
+// @Success 200 {object} models.Cat
+// @Failure 400 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /cats/{id} [get]
 func (ch *CatHandler) GetByID(c *gin.Context) {
 	id, valid := idParam(c)
 	if !valid {
@@ -63,21 +80,18 @@ func (ch *CatHandler) GetByID(c *gin.Context) {
 	c.JSON(http.StatusOK, cat)
 }
 
-func (ch *CatHandler) GetByShelterID(c *gin.Context) {
-	id, valid := idParam(c)
-	if !valid {
-		return
-	}
-
-	cats, err := ch.repo.GetCatsByShelterID(id)
-	if err != nil {
-		c.JSON(statusByError(err), gin.H{"error": err.Error()})
-		return
-	}
-
-	c.JSON(http.StatusOK, cats)
-}
-
+// Create godoc
+// @Summary Create cat
+// @Tags cats
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param cat body models.Cat true "Cat"
+// @Success 201 {object} models.Cat
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /cats [post]
 func (ch *CatHandler) Create(c *gin.Context) {
 	var cat models.Cat
 	if err := c.BindJSON(&cat); err != nil {
@@ -94,6 +108,20 @@ func (ch *CatHandler) Create(c *gin.Context) {
 	c.JSON(http.StatusCreated, cat)
 }
 
+// Update godoc
+// @Summary Update cat
+// @Tags cats
+// @Accept json
+// @Produce json
+// @Security ApiKeyAuth
+// @Param id path int true "Cat ID"
+// @Param cat body models.Cat true "Cat"
+// @Success 200 {object} models.Cat
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /cats/{id} [put]
 func (ch *CatHandler) Update(c *gin.Context) {
 	id, valid := idParam(c)
 	if !valid {
@@ -115,6 +143,17 @@ func (ch *CatHandler) Update(c *gin.Context) {
 	c.JSON(http.StatusOK, cat)
 }
 
+// Delete godoc
+// @Summary Delete cat
+// @Tags cats
+// @Security ApiKeyAuth
+// @Param id path int true "Cat ID"
+// @Success 204
+// @Failure 400 {object} map[string]string
+// @Failure 401 {object} map[string]string
+// @Failure 404 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /cats/{id} [delete]
 func (ch *CatHandler) Delete(c *gin.Context) {
 	id, valid := idParam(c)
 	if !valid {
@@ -129,6 +168,14 @@ func (ch *CatHandler) Delete(c *gin.Context) {
 	c.Status(http.StatusNoContent)
 }
 
+// DeleteAll godoc
+// @Summary Delete all cats
+// @Tags cats
+// @Security ApiKeyAuth
+// @Success 204
+// @Failure 401 {object} map[string]string
+// @Failure 500 {object} map[string]string
+// @Router /cats [delete]
 func (ch *CatHandler) DeleteAll(c *gin.Context) {
 	if err := ch.repo.DeleteAll(); err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

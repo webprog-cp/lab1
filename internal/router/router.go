@@ -8,6 +8,8 @@ import (
 	"cp_lab1/internal/handlers"
 
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
 func New(cfg *config.Config, app *app.App) *gin.Engine {
@@ -33,7 +35,7 @@ func requireAPIKey(c *gin.Context) {
 	c.Next()
 }
 
-func registerCats(ge *gin.Engine, ch *handlers.CatHandler) {
+func registerCats(ge *gin.RouterGroup, ch *handlers.CatHandler) {
 	cats := ge.Group("/cats")
 	cats.GET("", ch.GetAll)
 	cats.GET("/:id", ch.GetByID)
@@ -45,7 +47,7 @@ func registerCats(ge *gin.Engine, ch *handlers.CatHandler) {
 	protected.DELETE("/:id", ch.Delete)
 }
 
-func registerShelters(ge *gin.Engine, sh *handlers.ShelterHandler) {
+func registerShelters(ge *gin.RouterGroup, sh *handlers.ShelterHandler) {
 	shelters := ge.Group("/shelters")
 	shelters.GET("", sh.GetAll)
 	shelters.GET("/:id", sh.GetByID)
@@ -59,6 +61,8 @@ func registerShelters(ge *gin.Engine, sh *handlers.ShelterHandler) {
 }
 
 func registerRoutes(ge *gin.Engine, app *app.App) {
-	registerCats(ge, app.CatHandler)
-	registerShelters(ge, app.ShelterHandler)
+	api := ge.Group("/api/v1")
+	registerCats(api, app.CatHandler)
+	registerShelters(api, app.ShelterHandler)
+	ge.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 }

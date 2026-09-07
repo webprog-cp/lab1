@@ -1,5 +1,56 @@
 # Комп’ютерний практикум 1. Проєктування REST API та його реалізація
 
+## Швидкий старт
+
+Запуск API:
+
+```bash
+go run ./cmd/api
+```
+
+Swagger UI:
+
+```text
+http://localhost:8080/swagger/index.html
+```
+
+Base URL API:
+
+```text
+http://localhost:8080/api/v1
+```
+
+API key для POST, PUT, DELETE:
+
+```text
+X-API-Key: demo
+```
+
+Основні маршрути:
+
+```text
+GET    /api/v1/cats
+GET    /api/v1/cats/{id}
+POST   /api/v1/cats
+PUT    /api/v1/cats/{id}
+DELETE /api/v1/cats
+DELETE /api/v1/cats/{id}
+
+GET    /api/v1/shelters
+GET    /api/v1/shelters/{id}
+GET    /api/v1/shelters/{id}/cats
+POST   /api/v1/shelters
+PUT    /api/v1/shelters/{id}
+DELETE /api/v1/shelters
+DELETE /api/v1/shelters/{id}
+```
+
+Оновлення Swagger-документації:
+
+```bash
+swag init -g cmd/api/main.go
+```
+
 ## Мета
 
 Отримати навички проєктування та реалізації REST API вебзастосунку, що буде надавати доступ до декількох сутностей обраної предметної галузі.

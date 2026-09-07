@@ -6,6 +6,8 @@ import (
 	"cp_lab1/internal/app"
 	"cp_lab1/internal/config"
 	"cp_lab1/internal/router"
+
+	_ "cp_lab1/docs"
 )
 
 // @title Cats shelter management API
@@ -13,6 +15,9 @@ import (
 // @description REST API service for cats shelter management.
 // @host localhost:8080
 // @BasePath /api/v1
+// @securityDefinitions.apikey ApiKeyAuth
+// @in header
+// @name X-API-Key
 func main() {
 	cfg := config.Load()
 	a := app.New()
