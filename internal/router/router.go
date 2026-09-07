@@ -17,7 +17,7 @@ func New(cfg *config.Config, app *app.App) *gin.Engine {
 
 	ge := gin.New()
 
-	registerRoutes(ge, app)
+	registerRoutes(ge, cfg, app)
 
 	ge.Use(gin.Logger())
 	ge.Use(gin.Recovery()) // Recovers from any panic and returns 500 if there is one
@@ -60,8 +60,8 @@ func registerShelters(ge *gin.RouterGroup, sh *handlers.ShelterHandler) {
 	protected.DELETE("/:id", sh.Delete)
 }
 
-func registerRoutes(ge *gin.Engine, app *app.App) {
-	api := ge.Group("/api/v1")
+func registerRoutes(ge *gin.Engine, cfg *config.Config, app *app.App) {
+	api := ge.Group(cfg.BasePath())
 	registerCats(api, app.CatHandler)
 	registerShelters(api, app.ShelterHandler)
 	ge.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

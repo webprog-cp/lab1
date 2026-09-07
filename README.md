@@ -8,11 +8,8 @@
 go run ./cmd/api
 ```
 
-Swagger UI:
-
-```text
+Swagger UI
 http://localhost:8080/swagger/index.html
-```
 
 Base URL API:
 
@@ -86,9 +83,6 @@ swag init -g cmd/api/main.go
   - [X] зберігання сутностей у текстових файлах.
 
 - [x] 3. Реалізоване програмне забезпечення обов’язково повинно надавати інтерфейс Swagger (або аналог) для візуалізації та роботи з реалізованим REST API.
-```bash
-swag init -g cmd/api/main.go
-```
 
 ## Вимоги до звіту з роботи комп’ютерного практикуму
 
