@@ -16,6 +16,9 @@ func New(cfg *config.Config, app *app.App) *gin.Engine {
 	gin.SetMode(cfg.GinMode)
 
 	ge := gin.New()
+	if err := ge.SetTrustedProxies(nil); err != nil {
+		panic(err)
+	}
 
 	registerRoutes(ge, cfg, app)
 
