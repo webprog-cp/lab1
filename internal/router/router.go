@@ -12,12 +12,12 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 )
 
-func New(cfg *config.Config, app *app.App) *gin.Engine {
+func New(cfg *config.Config, app *app.App) (*gin.Engine, error) {
 	gin.SetMode(cfg.GinMode)
 
 	ge := gin.New()
 	if err := ge.SetTrustedProxies(nil); err != nil {
-		panic(err)
+		return nil, err
 	}
 
 	registerRoutes(ge, cfg, app)
@@ -25,7 +25,7 @@ func New(cfg *config.Config, app *app.App) *gin.Engine {
 	ge.Use(gin.Logger())
 	ge.Use(gin.Recovery()) // Recovers from any panic and returns 500 if there is one
 
-	return ge
+	return ge, nil
 }
 
 const apiKey = "demo"

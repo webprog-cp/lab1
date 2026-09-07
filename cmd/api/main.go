@@ -22,7 +22,10 @@ func main() {
 	cfg := config.Load()
 	a := app.New()
 
-	r := router.New(cfg, a)
+	r, err := router.New(cfg, a)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	host := cfg.Host + ":" + cfg.Port
 
