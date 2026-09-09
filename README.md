@@ -2,14 +2,25 @@
 
 ## Швидкий старт
 
+Встановлення інструментів:
+
+```bash
+go mod download
+
+go install github.com/swaggo/swag/cmd/swag@latest
+```
+
 Запуск API:
 
 ```bash
 go run ./cmd/api
 ```
 
-Swagger UI
+Swagger UI читає OpenAPI 3:
 http://localhost:8080/swagger/index.html
+
+OpenAPI YAML:
+http://localhost:8080/openapi.yaml
 
 Base URL API:
 
@@ -23,29 +34,10 @@ API key для POST, PUT, DELETE:
 X-API-Key: demo
 ```
 
-Основні маршрути:
-
-```text
-GET    /api/v1/cats
-GET    /api/v1/cats/{id}
-POST   /api/v1/cats
-PUT    /api/v1/cats/{id}
-DELETE /api/v1/cats
-DELETE /api/v1/cats/{id}
-
-GET    /api/v1/shelters
-GET    /api/v1/shelters/{id}
-GET    /api/v1/shelters/{id}/cats
-POST   /api/v1/shelters
-PUT    /api/v1/shelters/{id}
-DELETE /api/v1/shelters
-DELETE /api/v1/shelters/{id}
-```
-
-Оновлення Swagger-документації:
+Оновлення документації:
 
 ```bash
-swag init -g cmd/api/main.go
+./scripts/generate-openapi.sh
 ```
 
 ## Мета

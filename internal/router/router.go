@@ -67,5 +67,6 @@ func registerRoutes(ge *gin.Engine, cfg *config.Config, app *app.App) {
 	api := ge.Group(cfg.BasePath())
 	registerCats(api, app.CatHandler)
 	registerShelters(api, app.ShelterHandler)
-	ge.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	ge.StaticFile("/openapi.yaml", "docs/openapi.yaml")
+	ge.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler, ginSwagger.URL("/openapi.yaml")))
 }
